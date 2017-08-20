@@ -32,6 +32,7 @@ class Shop(models.Model):
     address = models.CharField(max_length=512)
     position = models.CharField(max_length=256) #todo:x,y pos
     desc = models.CharField(max_length=256)
+    disable = models.BooleanField(default=False)
 
 class OutBound(models.Model):
     product = models.ForeignKey(Product)
