@@ -1,12 +1,23 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
-class User(models.Model):
-    name = models.CharField(max_length=128, primary_key=True)
-    psd = models.CharField(max_length=128)
-    level = models.PositiveSmallIntegerField(default=100)
-    disable = models.BooleanField(default=False)
-    creat_time = models.DateTimeField(auto_now_add=True)
+# class User(models.Model):
+#     name = models.CharField(max_length=128, primary_key=True)
+#     psd = models.CharField(max_length=128)
+#     level = models.PositiveSmallIntegerField(default=100)
+#     disable = models.BooleanField(default=False)
+#     creat_time = models.DateTimeField(auto_now_add=True)
+
+class PermMeta(models.Model):
+    'this is use for perm'
+    class Meta:
+        'global perms'
+        permissions = (
+            ("super", "this is god"),
+            ("admin", "almost god"),
+            ("car", "this is driver"),
+        )
 
 class Product(models.Model):
     name = models.CharField(max_length=128, primary_key=True)

@@ -18,6 +18,9 @@ from django.contrib import admin
 from japi import views as japi
 
 urlpatterns = [
+    url(r'^api/user/get/', japi.get_users),
+    url(r'^api/user/add/', japi.add_user),
+    url(r'^api/user/disable/', japi.disable_user),
     url(r'^api/inbound/get/', japi.get_inbounds),
     url(r'^api/inbound/add/', japi.new_inbound),
     url(r'^api/storage/get/', japi.get_storages),
