@@ -1,7 +1,25 @@
-var xhr = new XMLHttpRequest();
-xhr.open("POST", "http://localhost:8000/api/product/add/", true);
-xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
+function jsontouri(params) {
+    var query = "";
+    for (key in params) {
+        query += encodeURIComponent(key)+"="+encodeURIComponent(params[key])+"&";
+    }
+    return query;
+}
+
+
+var data = {
+    username: 'car',
+    password: 'car',
+    perms: 'car'
+};
+var method = "POST";
+var url = "http://localhost:8000/api/user/add/";
+
+var xhr = new XMLHttpRequest();
+xhr.open(method, url, true);
+xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+xhr.setRequestHeader("Authorization", btoa("super" + ":" + "1234"))
 xhr.onloadend = function () {
     console.log('status: ' + xhr.status)
     console.log('status text' + xhr.statusText)
@@ -9,9 +27,9 @@ xhr.onloadend = function () {
     console.log('res text:' + JSON.stringify(xhr.responseText))
 };
 
-var data = {
-    name: 'beerA',
-    desc: 'this is a test product'
+if (method == "GET"){
+    xhr.send();
 }
-
-xhr.send(JSON.stringify(data));
+else {
+    xhr.send(jsontouri(data));
+}

@@ -3,7 +3,7 @@ from functools import wraps
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 
-def __authenticate_user(request):
+def authenticate_user(request):
     au = request.META.get('HTTP_AUTHORIZATION')
     if au:
         up = base64.b64decode(au)
@@ -16,7 +16,7 @@ def __authenticate_user(request):
 def __require_user_perm(func_view, perms):
     @wraps(func_view)
     def decorator(request, *args, **kwargs):
-        user = __authenticate_user(request)
+        user = authenticate_user(request)
         if user and user.is_active:
             for perm in perms:
                 if user.has_perm(perm):
