@@ -254,7 +254,7 @@ def get_outbounds(request):  # todo: batch
 @csrf_exempt
 def get_outbound_detail(request):
     obj = None
-    pk = request.POST.get('pk', '')
+    pk = request.GET.get('pk', '')
     if pk:
         obj = OutBound.objects.get(pk=pk)
     else:
