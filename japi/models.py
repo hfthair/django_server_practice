@@ -54,6 +54,7 @@ class OutBound(models.Model):
     close = models.BooleanField(default=False)
 
 class Distribution(models.Model):
+    # todo: time time
     outbound = models.ForeignKey(OutBound)
     shop = models.ForeignKey(Shop)
     number = models.PositiveIntegerField()

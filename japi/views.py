@@ -265,7 +265,7 @@ def get_outbound_detail(request):
         dises = Distribution.objects.filter(outbound=obj)
         tmp = [obj]
         if dises:
-            tmp.append(dises)
+            tmp.extend(dises)
         json_response = serializers.serialize('json', tmp)
         return HttpResponse(json_response)
     raise Http404
@@ -334,7 +334,7 @@ def new_distribution(request):
     if pk and pk_shop and number:
         outb = get_object_or_404(OutBound, pk=pk)
         shop = get_object_or_404(Shop, pk=pk_shop)
-        if outb.number > number:
+        if outb.number >= number:
             dis = Distribution(outbound=outb, shop=shop, number=number, user=request.user)
             outb.number = outb.number - number
             with transaction.atomic():
