@@ -23,9 +23,6 @@ class Product(models.Model):
     name = models.CharField(max_length=128, primary_key=True)
     desc = models.CharField(max_length=512)
     disable = models.BooleanField(default=False)
-
-class Storage(models.Model):
-    product = models.OneToOneField(Product, primary_key=True)
     number = models.PositiveIntegerField(default=0)
     last_update = models.DateTimeField(auto_now=True)
 

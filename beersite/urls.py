@@ -30,7 +30,6 @@ urlpatterns = [
     url(r'^api/outbound/close/', japi.close_outbound),
     url(r'^api/outbound/detail/', japi.get_outbound_detail),
     url(r'^api/outbound/distribut/', japi.new_distribution),
-    url(r'^api/storage/get/', japi.get_storages),
     url(r'^api/product/get/', japi.get_products),
     url(r'^api/product/add/', japi.add_product),
     url(r'^api/product/update/', japi.update_product),

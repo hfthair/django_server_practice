@@ -102,7 +102,7 @@ def disable_user(request):
 @csrf_exempt
 def get_products(request):  # todo: batch
     objs = Product.objects.all()
-    json_response = serializers.serialize('json', objs)
+    json_response = serializers.serialize('json', objs, use_natural_foreign_keys=True)
     return HttpResponse(json_response)
 
 @require_backend_user
@@ -145,7 +145,7 @@ def disable_product(request):
 @csrf_exempt
 def get_shops(request):  # todo: batch
     objs = Shop.objects.all()
-    json_response = serializers.serialize('json', objs)
+    json_response = serializers.serialize('json', objs, use_natural_foreign_keys=True)
     return HttpResponse(json_response)
 
 @require_backend_user
@@ -201,16 +201,9 @@ def disable_shop(request):
 
 @require_car_user
 @csrf_exempt
-def get_storages(request):  # todo: batch
-    objs = Storage.objects.all()
-    json_response = serializers.serialize('json', objs)
-    return HttpResponse(json_response)
-
-@require_car_user
-@csrf_exempt
 def get_inbounds(request):  # todo: batch
     objs = InBound.objects.all()
-    json_response = serializers.serialize('json', objs)
+    json_response = serializers.serialize('json', objs, use_natural_foreign_keys=True)
     return HttpResponse(json_response)
 
 @require_car_user
@@ -228,18 +221,10 @@ def new_inbound(request):
     if product and number:
         p = get_object_or_404(Product, pk=product)
         inb = InBound(product=p, number=number, source=source, user=user)
-        # s = get_object_or_404(Storage, pk=product)
-        s = None
-        try:
-            s = Storage.objects.get(pk=product)
-        except:
-            pass
-        if not s:
-            s = Storage(pk=product, number=0)
-        s.number = s.number + number
+        p.number = p.number + number
         with transaction.atomic():
             inb.save()
-            s.save()
+            p.save()
             return HttpResponse('success')
     raise Http404
 
@@ -247,7 +232,7 @@ def new_inbound(request):
 @csrf_exempt
 def get_outbounds(request):  # todo: batch
     objs = OutBound.objects.all()
-    json_response = serializers.serialize('json', objs)
+    json_response = serializers.serialize('json', objs, use_natural_foreign_keys=True)
     return HttpResponse(json_response)
 
 @require_car_user
@@ -266,7 +251,7 @@ def get_outbound_detail(request):
         tmp = [obj]
         if dises:
             tmp.extend(dises)
-        json_response = serializers.serialize('json', tmp)
+        json_response = serializers.serialize('json', tmp, use_natural_foreign_keys=True)
         return HttpResponse(json_response)
     raise Http404
 
@@ -284,12 +269,11 @@ def new_outbound(request):
     if product and number:
         p = get_object_or_404(Product, pk=product)
         outb = OutBound(product=p, number=number, user=user)
-        s = get_object_or_404(Storage, pk=product)
-        if s.number >= number:
-            s.number = s.number - number
+        if p.number >= number:
+            p.number = p.number - number
             with transaction.atomic():
                 outb.save()
-                s.save()
+                p.save()
                 return HttpResponse('success')
     raise Http404
 
@@ -306,12 +290,12 @@ def close_outbound(request):  # storage back
         outb = get_object_or_404(OutBound, pk=pk)
         if outb.number > 0:
             if outb.product:
-                storage = get_object_or_404(Storage, pk=outb.product)
-                if storage:
-                    storage.number = storage.number + outb.number
+                p = get_object_or_404(Product, pk=outb.product)
+                if p:
+                    p.number = p.number + outb.number
                     outb.close = True
                     with transaction.atomic():
-                        storage.save()
+                        p.save()
                         outb.save()
                         return HttpResponse('success')
         else:
