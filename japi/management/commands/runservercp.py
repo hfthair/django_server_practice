@@ -54,7 +54,7 @@ Examples:
 
 CPSERVER_OPTIONS = {
     'host': '0.0.0.0',
-    'port': 8088,
+    'port': 9601,
     'server_name': '0.0.0.0',
     'threads': 10,
     'daemonize': False,

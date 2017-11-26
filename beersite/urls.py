@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^api/shop/add/', japi.add_shop),
     url(r'^api/shop/update/', japi.update_shop),
     url(r'^api/shop/remove/', japi.disable_shop),
+    url(r'^api/version/latest/', japi.latest_version),
     url(r'^api/', japi.index),
     url(r'^admin/', admin.site.urls),
 ]

@@ -18,6 +18,16 @@ def index(request):
     return HttpResponse('hello')
 
 @csrf_exempt
+def latest_version(request):
+    info = {
+        'version': 1.0,
+        'url': '',
+        'safe': True
+    }
+    json_response = json.dumps(info)
+    return HttpResponse(json_response)
+
+@csrf_exempt
 def test_user(request):
     x = authenticate_user(request)
     if x and x.is_active:
@@ -231,7 +241,7 @@ def new_inbound(request):
 @require_car_user
 @csrf_exempt
 def get_outbounds(request):  # todo: batch
-    objs = OutBound.objects.all()
+    objs = OutBound.objects.all().order_by('-last_update')
     json_response = serializers.serialize('json', objs, use_natural_foreign_keys=True)
     return HttpResponse(json_response)
 
@@ -290,7 +300,7 @@ def close_outbound(request):  # storage back
         outb = get_object_or_404(OutBound, pk=pk)
         if outb.number > 0:
             if outb.product:
-                p = get_object_or_404(Product, pk=outb.product)
+                p = outb.product
                 if p:
                     p.number = p.number + outb.number
                     outb.close = True
