@@ -336,5 +336,3 @@ def new_distribution(request):
                 outb.save()
                 return HttpResponse('success')
     raise Http404
-
-

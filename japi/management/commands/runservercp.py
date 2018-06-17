@@ -4,7 +4,6 @@ Idea and code snippets borrowed from http://www.xhtml.net/scripts/Django-CherryP
 Adapted to run as a management command
 """
 
-
 import logging
 import sys
 import os
@@ -13,7 +12,6 @@ import time
 import errno
 from socket import gethostname
 from django.core.management.base import BaseCommand
-
 
 CPSERVER_HELP = r"""
   Run this project in a CherryPy webserver. To do this, CherryPy from
@@ -66,7 +64,6 @@ CPSERVER_OPTIONS = {
     'ssl_private_key': None,
 }
 
-
 class Command(BaseCommand):
     help = "CherryPy Server for project. Requires CherryPy."
     args = "[various KEY=val options, use `runcpserver help` for help]"
@@ -84,7 +81,6 @@ class Command(BaseCommand):
     def usage(self, subcommand):
         return CPSERVER_HELP
 
-
 def change_uid_gid(uid, gid=None):
     """Try to change UID and GID to the provided values.
     UID and GID are given as names like 'nobody' not integer.
@@ -97,7 +93,6 @@ def change_uid_gid(uid, gid=None):
     (uid, gid) = get_uid_gid(uid, gid)
     os.setgid(gid)
     os.setuid(uid)
-
 
 def get_uid_gid(uid, gid=None):
     """Try to change UID and GID to the provided values.
@@ -117,7 +112,6 @@ def get_uid_gid(uid, gid=None):
             gid = default_grp
     return (uid, gid)
 
-
 def poll_process(pid):
     """
     Poll for process with given pid up to 10 times waiting .25 seconds in between each poll. 
@@ -135,7 +129,6 @@ def poll_process(pid):
             else:
                 raise  # TODO
     return True
-
 
 def stop_server(pidfile):
     """
@@ -155,7 +148,6 @@ def stop_server(pidfile):
             if still_alive(pid):
                 raise OSError("Process %s did not stop.")
         os.remove(pidfile)
-
 
 def start_server(options):
     """
@@ -184,7 +176,6 @@ def start_server(options):
         server.start()
     except KeyboardInterrupt:
         server.stop()
-
 
 def runcpserver(argset=[], **kwargs):
     # Get the options
@@ -223,7 +214,6 @@ def runcpserver(argset=[], **kwargs):
     # Start the webserver
     print('starting server with options %s' % options)
     start_server(options)
-
 
 if __name__ == '__main__':
     runcpserver(sys.argv[1:])
